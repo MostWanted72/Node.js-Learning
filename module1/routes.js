@@ -49,8 +49,10 @@ const listener = (req, res) => {
       // write files synchronously, meaning it pouses the rest of the code until the following coee  is excuted.
       // fs.writeFileSync("message.txt", parsedBody.split("=")[1]);
 
+      const message = parsedBody.split('=')[1];
+
       // writeFile is async method which takes a callback as its third parameter it's excuted onces the event is completed, also it does not stops the rest of the code.
-      fs.writeFile("message.txt", parsedBody.split("=")[1], (err) => {
+      fs.writeFile("message.txt", message, (err) => {
         // setting status code of response 302;
         res.statusCode = 302;
 
