@@ -12,3 +12,10 @@ const toArray = (...args) => {
 }
 
 toArray(1, 2, 3, 4)
+
+/*
+ difference between toString and String
+ toString method throws error when string is null;
+
+ while string method return null for null
+*/
