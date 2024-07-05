@@ -1,28 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
+
+const adminRoute = require('./routes/admin');
+const shopRoute = require('./routes/shop');
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')))  // express.static is a middleware which serves static files, like css, images etc
 
-// because we are not using next() here, the middleware will stop after the excuations
-// response for url path /add-products
-app.use('/add-products', (req, res, next) => {
-  res.send(
-    '<form action="/product" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>'
-  )
-  
-  // Allows the request to continue to next middleware in line
-  // next();
-})
+app.use('/admin', adminRoute);
+app.use(shopRoute);
 
-app.use('/product', (req, res, next) => {
-  console.log('check this body', req.body)
-  res.redirect('/')
-})
-
-app.use('/', (req, res, next) => {
-  res.send('<h1>Hello from mars</h1>')  // sets request header content type automatically
+app.use((req, res, next) => {
+  res.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'))
 })
 
 app.listen(3000)
