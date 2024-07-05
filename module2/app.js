@@ -3,8 +3,9 @@ const bodyParser = require("body-parser");
 const path = require("path");
 // const expressHandleBars = require("express-handlebars");
 
-const adminData = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 const shopRoute = require("./routes/shop");
+const pageNotFoundController = require('./controllers/pageNotFound');
 
 const app = express();
 
@@ -24,14 +25,9 @@ app.set("views", "views");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // express.static is a middleware which serves static files, like css, images etc
 
-app.use("/admin", adminData.route);
+app.use("/admin", adminRoutes);
 app.use(shopRoute);
 
-app.use((req, res, next) => {
-  res.status(404).render("page-not-found", { docTitle: "Page Not Found", path: '404' });
-  // res
-  //   .status(404)
-  //   .sendFile(path.join(__dirname, "views", "page-not-found.html"));
-});
+app.use(pageNotFoundController.pageNotFound);
 
 app.listen(3000);
