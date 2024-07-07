@@ -1,7 +1,7 @@
-<%- include('includes/head.ejs') %>
+<%- include('../includes/head.ejs') %>
 </head>
 <body>
-  <%- include('includes/navigation.ejs') %>
+  <%- include('../includes/navigation.ejs') %>
 
   <main>
     <% if (prods.length) { %>
@@ -12,14 +12,16 @@
               <h1 class="product_title"><%= product.title %></h1>
             </header>
             <div class="card__iamge">
-              <img src="https://img.freepik.com/free-vector/gradient-travel-agency-annual-report-template_23-2149404112.jpg?t=st=1720162557~exp=1720166157~hmac=f9c08bde082d26d06df04b119b2565cf4a9d941c2effdf6db1da251f7cfe383f&w=100" alt="A book" />
+              <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
             </div>
             <div class="card__content">
-              <h2 class="product__price">$20</h2>
-              <p class="product_description">Description of Product</p>
+              <h2 class="product__price">$<%= product.price %></h2>
+              <p class="product_description"><%= product.description %></p>
             </div>
             <div class="card__action">
-              <button class="btn">Add to Cart</button>
+              <form action="/add-to-cart" method="POST">
+                <button class="btn">Add to Cart</button>
+              </form>
             </div>
           </article>
         <% } %>
@@ -29,4 +31,4 @@
     <% } %>
   </main>
 
-<%- include('includes/end.ejs') %>
+<%- include('../includes/end.ejs') %>

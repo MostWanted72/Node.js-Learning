@@ -4,20 +4,47 @@
   margin: auto;
 }
 
+.card__action {
+  display: flex;
+}
+
 .form-control {
   margin: 10px 0;
 }
 
 .form-control label,
-.form-control input {
+.form-control input,
+.form-control textarea {
   display: block;
   width: 100%;
+  padding: 9px 18px;
 }
 
-.form-control input {
+.form-control input,
+.form-control textarea {
   border: 1px solid #eba2a2;
   font: inherit;
   border-radius: 20px;
+  padding: 9px 18px;
+}
+
+.btn {
+  text-decoration: none;
+  font: inherit;
+  border: 1px solid #eba2a2;
+  background: white;
+  color: #eba2a2;
+  padding: 9px 18px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.btn:hover {
+  background: #eba2a2;
+  color: white;
+  padding: 9px 18px;
+  margin-right: 10px;
+  border-radius: 3px;
 }
 
 button {
