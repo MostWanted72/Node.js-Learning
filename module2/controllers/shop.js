@@ -1,6 +1,7 @@
 const Product = require("../modals/product");
+const Cart = require("../modals/cart");
 
-exports.getProduct = (req, res, next) => {
+exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render("shop/product-list", {
       prods: products,
@@ -8,6 +9,25 @@ exports.getProduct = (req, res, next) => {
       path: "/products",
     });
   });
+};
+
+exports.getProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    res.render("shop/product-details", {
+      product,
+      docTitle: product.title,
+      path: "/products",
+    });
+  });
+};
+
+exports.postCart = (req, res, next) => {
+  const productId = req.body.productId;
+  Product.findById(productId, (product) => {
+    Cart.addProduct(productId, product.price);
+  });
+  res.redirect("/");
 };
 
 exports.getIndex = (req, res, next) => {

@@ -14,6 +14,10 @@ main {
   padding: 20px;
 }
 
+.centered {
+  text-align: center;
+}
+
 .main-header__nav {
   height: 100%;
   display: flex;

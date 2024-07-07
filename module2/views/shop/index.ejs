@@ -2,6 +2,7 @@
 </head>
 <body>
   <%- include('../includes/navigation.ejs') %>
+  <link rel="stylesheet" href="/css/product.css">
 
   <main>
     <% if (prods.length) { %>
@@ -19,7 +20,7 @@
               <p class="product_description"><%= product.description %></p>
             </div>
             <div class="card__action">
-              <button class="btn">Add to Cart</button>
+              <%- include('../includes/add-to-cart.ejs', { product: product}) %>
             </div>
           </article>
         <% } %>

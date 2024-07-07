@@ -1,11 +1,30 @@
 const Product = require("../modals/product");
 
 exports.getAddProduct = (req, res, next) => {
-  res.render("admin/add-product", {
+  res.render("admin/edit-product", {
     path: "/admin/add-product",
     docTitle: "My Products",
-    activeProduct: true,
-    productCSS: true,
+    editMode: false,
+  });
+};
+
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.Product("/");
+  }
+
+  const productId = req.params.productId;
+  Product.findById(productId, (product) => {
+    if (!product) {
+      return res.redirect("/");
+    }
+    res.render("admin/edit-product", {
+      path: "/admin/edit-product",
+      docTitle: "My Products",
+      editMode,
+      product,
+    });
   });
 };
 
