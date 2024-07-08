@@ -13,7 +13,6 @@ const readCartFile = (callback) =>
     if (!err) {
       cart = JSON.parse(fileContent);
     }
-    console.log("check this part", cart);
     return callback(cart);
   });
 

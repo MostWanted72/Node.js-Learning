@@ -58,4 +58,11 @@ module.exports = class Product {
       callback(product);
     });
   }
+
+  static deleteProduct(id) {
+    getProductsFromFile((products) => {
+      const updatedProducts = products.filter((prod) => prod.id !== id);
+      writeProductsToFile(updatedProducts);
+    });
+  }
 };

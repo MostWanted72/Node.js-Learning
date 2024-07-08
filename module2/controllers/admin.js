@@ -57,6 +57,12 @@ exports.postAddProduct = (req, res, next) => {
   res.redirect("/");
 };
 
+exports.postDeleteProduct = (req, res, next) => {
+  const productId = req.params.productId;
+  Product.deleteProduct(productId);
+  res.redirect("/admin/products");
+};
+
 exports.getProduct = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render("admin/products", {
