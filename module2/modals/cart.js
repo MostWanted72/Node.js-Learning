@@ -45,4 +45,21 @@ module.exports = class Cart {
       });
     });
   }
+
+  static deleteProductFromCart(id, productPrice) {
+    readCartFile((cart) => {
+      const existingProductIndex = cart.products.findIndex(
+        (prod) => prod.id === id
+      );
+      if (existingProductIndex !== -1) {
+        const productQuentity = cart.products[existingProductIndex].gty;
+        cart.totalPrice -= productQuentity * productPrice;
+        const updatedProducts = cart.products.filter((prod) => prod.id !== id);
+        cart.products = [...updatedProducts];
+        fs.writeFile(filePath, JSON.stringify(cart), (err) => {
+          console.log(err);
+        });
+      }
+    });
+  }
 };
