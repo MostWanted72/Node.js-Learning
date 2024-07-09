@@ -40,10 +40,26 @@ exports.getIndex = (req, res, next) => {
   });
 };
 
-exports.cart = (req, res, next) => {
-  res.render("shop/cart", {
-    path: "/cart",
-    docTitle: "Your Cart",
+exports.getCart = (req, res, next) => {
+  Cart.getAllProductsFromCart((cart) => {
+    Product.fetchAll((products) => {
+      const cartProducts = [];
+      for (let i = 0; i < cart.products.length; i += 1) {
+        const ctProd = products.filter(
+          (prod) => cart.products[i].id === prod.id
+        );
+
+        cartProducts.push({
+          ...ctProd[0],
+          qty: cart.products[i].qty,
+        });
+      }
+      res.render("shop/cart", {
+        path: "/cart",
+        docTitle: "Your Cart",
+        cart: cartProducts,
+      });
+    });
   });
 };
 
