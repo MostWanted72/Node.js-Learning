@@ -5,7 +5,9 @@ const path = require("path");
 
 const adminRoutes = require("./routes/admin");
 const shopRoute = require("./routes/shop");
-const pageNotFoundController = require('./controllers/pageNotFound');
+const pageNotFoundController = require("./controllers/pageNotFound");
+
+const db = require("./utils/database");
 
 const app = express();
 
@@ -21,6 +23,8 @@ const app = express();
 // app.set() functions allows us to set global variables acroos our app, but certain variable are predifined such "view engine" to set template engine and "views" for the folder where our html files are.
 app.set("view engine", "ejs");
 app.set("views", "views");
+
+db.execute("SELECT * FROM products");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public"))); // express.static is a middleware which serves static files, like css, images etc
