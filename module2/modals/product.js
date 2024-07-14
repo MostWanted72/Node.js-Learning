@@ -1,28 +1,6 @@
-const fs = require("fs");
-const path = require("path");
+const db = require('../utils/database');
 
-const Cart = require("./cart");
-
-const filePath = path.join(
-  path.dirname(require.main.filename),
-  "data",
-  "products.json"
-);
-
-const getProductsFromFile = (callback) => {
-  fs.readFile(filePath, (err, fileContent) => {
-    if (err) {
-      return callback([]);
-    }
-    callback(JSON.parse(fileContent));
-  });
-};
-
-const writeProductsToFile = (products) => {
-  fs.writeFile(filePath, JSON.stringify(products), (err) => {
-    console.log(err);
-  });
-};
+const Cart = require('./cart');
 
 module.exports = class Product {
   constructor(id, title, imageUrl, description, price) {
@@ -34,47 +12,21 @@ module.exports = class Product {
   }
 
   save() {
-    getProductsFromFile((products) => {
-      if (this.id) {
-        const existingProductIndex = products.findIndex(
-          (prod) => prod.id === this.id
-        );
-        const updatedProducts = [...products];
-        updatedProducts[existingProductIndex] = this;
-        writeProductsToFile(updatedProducts);
-      } else {
-        this.id = Math.random().toString();
-        products.push(this);
-        writeProductsToFile(products);
-      }
-    });
+    return db.execute(
+      'INSERT INTO products (title, price, description, imageUrl) VALUES (?, ?, ?, ?)',
+      [this.title, this.price, this.description, this.imageUrl]
+    );
   }
 
-  static fetchAll(callback) {
-    return getProductsFromFile(callback);
+  static fetchAll() {
+    return db.execute('SELECT * FROM products');
   }
 
-  static findById(id, callback) {
-    getProductsFromFile((products) => {
-      const product = products.find((p) => p.id === id);
-      callback(product);
-    });
+  static findById(id) {
+    return db.execute(`SELECT * FROM products WHERE products.id = ?`, [id]);
   }
 
-  static deleteProduct(id) {
-    getProductsFromFile((products) => {
-      Product.getProductPriceById(id, (productPrice) => {
-        Cart.deleteProductFromCart(id, productPrice);
-        const updatedProducts = products.filter((prod) => prod.id !== id);
-        writeProductsToFile(updatedProducts);
-      });
-    });
-  }
+  static deleteProduct(id) {}
 
-  static getProductPriceById(id, callback) {
-    getProductsFromFile((products) => {
-      const product = products.find((prod) => prod.id === id);
-      callback(product.price);
-    });
-  }
+  static getProductPriceById(id, callback) {}
 };

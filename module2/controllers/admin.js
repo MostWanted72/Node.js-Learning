@@ -1,9 +1,9 @@
-const Product = require("../modals/product");
+const Product = require('../modals/product');
 
 exports.getAddProduct = (req, res, next) => {
-  res.render("admin/edit-product", {
-    path: "/admin/add-product",
-    docTitle: "My Products",
+  res.render('admin/edit-product', {
+    path: '/admin/add-product',
+    docTitle: 'My Products',
     editMode: false,
   });
 };
@@ -11,21 +11,23 @@ exports.getAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
-    return res.Product("/");
+    return res.Product('/');
   }
 
   const productId = req.params.productId;
-  Product.findById(productId, (product) => {
-    if (!product) {
-      return res.redirect("/");
-    }
-    res.render("admin/edit-product", {
-      path: "/admin/edit-product",
-      docTitle: "My Products",
-      editMode,
-      product,
+  Product.findById(productId)
+    .then(([product]) => {
+      res.render('admin/edit-product', {
+        path: '/admin/edit-product',
+        docTitle: 'My Products',
+        editMode,
+        product: product[0],
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      return res.redirect('/');
     });
-  });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -43,7 +45,7 @@ exports.postEditProduct = (req, res, next) => {
     updastedPrice
   );
   updatedProduct.save();
-  res.redirect("/admin/products");
+  res.redirect('/admin/products');
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -53,22 +55,26 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
 
   const product = new Product(null, title, imageUrl, description, price);
-  product.save();
-  res.redirect("/");
+  product
+    .save()
+    .then(res.redirect('/'))
+    .catch((err) => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   Product.deleteProduct(productId);
-  res.redirect("/admin/products");
+  res.redirect('/admin/products');
 };
 
 exports.getProduct = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("admin/products", {
-      prods: products,
-      docTitle: "Admin Products",
-      path: "/admin/products",
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, fieldLabels]) => {
+      res.render('admin/products', {
+        prods: rows,
+        docTitle: 'Admin Products',
+        path: '/admin/products',
+      });
+    })
+    .catch((err) => console.log(err));
 };
