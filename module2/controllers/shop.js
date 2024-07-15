@@ -2,26 +2,27 @@ const Product = require('../modals/product');
 const Cart = require('../modals/cart');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldLabel]) => {
+    Product.findAll()
+    .then(products => {
       res.render('shop/product-list', {
-        prods: rows,
+        prods: products,
         docTitle: 'All Products',
         path: '/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch(error => console.log('error in fetching', error))
 };
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findById(productId).then(([product]) => {
+  Product.findByPk(productId).then((product) => {
     res.render('shop/product-details', {
-      product: product[0],
+      product: product,
       docTitle: product.title,
       path: '/products',
     });
   });
+  
 };
 
 exports.postCart = (req, res, next) => {
@@ -33,15 +34,15 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldLabel]) => {
+  Product.findAll()
+    .then(products => {
       res.render('shop/index', {
-        prods: rows,
+        prods: products,
         docTitle: 'Shop',
         path: '/',
       });
     })
-    .catch((err) => console.log(err));
+    .catch(error => console.log('error in fetching', error))
 };
 
 exports.getCart = (req, res, next) => {

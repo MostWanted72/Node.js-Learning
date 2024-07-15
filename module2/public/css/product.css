@@ -8,6 +8,10 @@
   display: flex;
 }
 
+.card__iamge, img{
+  height: 200px;
+}
+
 .form-control {
   margin: 10px 0;
 }
