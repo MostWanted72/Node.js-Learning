@@ -9,7 +9,9 @@ const sequelize = require("./utils/database");
 
 const Product = require("./modals/product");
 const User = require("./modals/user");
-const { constants } = require("buffer");
+const Cart = require("./modals/cart");
+const CArtItem = require("./modals/cart-item");
+const CartItem = require("./modals/cart-item");
 
 const app = express();
 
@@ -32,8 +34,12 @@ app.use(shopRoute);
 
 app.use(pageNotFoundController.pageNotFound);
 
-Product.belongsTo(User, { constants: true, onDelete: "CASCADE" });
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   .sync()
@@ -47,7 +53,8 @@ sequelize
     return user;
   })
   .then((user) => {
-    console.log(user);
-    app.listen(3000);
+    console.log("check this part", user);
+    return user.createCzrt();
   })
+  .then(() => app.listen(3000))
   .catch((error) => console.log("sequelize error", error));
